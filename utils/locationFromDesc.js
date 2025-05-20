@@ -52,7 +52,7 @@ export default async function locationFromDesc(page) {
       return null
     })
 
-    console.log('City or Location:', cityOrLocation)
+    // console.log('City or Location:', cityOrLocation)
     return cityOrLocation
   } catch (error) {
     console.error('Error in locationFromDesc:', error.message)

@@ -2,6 +2,10 @@ import addToExcel from "./addToExcel.js"
 import scrapeActiveJobData from "./scrapeActiveJobData.js"
 
 export default async function visitJobLinks(jobData, browser) {
+  const readableDate = new Date().toLocaleString().replace(/[/:, ]+/g, '-')
+  const expiredFilename = `./expired_jobs_${readableDate}.xlsx`
+  const activeFileName = `./active_jobs_${readableDate}.xlsx`
+
   for (const url of jobData) {
     if (!url || typeof url !== 'string') {
       console.log('Invalid URL skipped:', url)
@@ -20,14 +24,10 @@ export default async function visitJobLinks(jobData, browser) {
       const finalURL = page.url()
       if (finalURL.includes('job-overview.expired')) {
         console.log('Job Expired')
-        await addToExcel(
-          './expired_jobs.xlsx',
-          ['Expired Job URLs'],
-          [url],
-        )
+        await addToExcel(expiredFilename, ['Expired Job URLs'], [url])
         // console.log('Job added to expired_jobs.xlsx')
       } else {
-        await scrapeActiveJobData(page, finalURL)
+        await scrapeActiveJobData(page, finalURL, activeFileName)
       }
 
       await page.close()

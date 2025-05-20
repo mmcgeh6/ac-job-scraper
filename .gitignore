@@ -1,1 +1,4 @@
 /node_modules
+utils/getCoordinates*
+/utils/getCoordinates.js
+

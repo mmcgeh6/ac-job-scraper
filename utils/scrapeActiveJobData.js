@@ -2,11 +2,12 @@ import addToExcel from './addToExcel.js'
 import getCoordinates from './getCoordinates.js'
 import locationFromDesc from './locationFromDesc.js'
 
-export default async function scrapeActiveJobData(page, finalURL) {
+export default async function scrapeActiveJobData(page, finalURL, fileName) {
   const jobDetailSelector =
     '#container-d04abd4ec7 > div > div.job-detail.aem-GridColumn.aem-GridColumn--default--12 > div > table'
 
   const jobTable = await page.$(jobDetailSelector)
+
   if (jobTable) {
     const jobDetails = await page.evaluate((selector) => {
       const rows = Array.from(
@@ -24,19 +25,21 @@ export default async function scrapeActiveJobData(page, finalURL) {
       return detailMap
     }, jobDetailSelector)
 
-    const { latitude, longitude } = await getCoordinates(
-      jobDetails['City'] || '',
-      jobDetails['State'] || '',
-      jobDetails['Country'] || '',
-    )
+    const { latitude, longitude } =
+      jobDetails['City'] === undefined
+        ? { latitude: '', longitude: '' }
+        : await getCoordinates(
+            jobDetails['City'] || '',
+            jobDetails['State'] || '',
+            jobDetails['Country'] || '',
+          )
 
-    console.log('Job details:', jobDetails['City'])
     let jobLocation
     if (jobDetails['City'] === undefined) {
       jobLocation = await locationFromDesc(page)
     }
     addToExcel(
-      './active_jobs.xlsx',
+      fileName,
       [
         'URL',
         'Functional area',
@@ -50,7 +53,7 @@ export default async function scrapeActiveJobData(page, finalURL) {
         'Last day to apply',
         'Latitude',
         'Longitude',
-        'MISC',
+        'Misc',
       ],
       [
         finalURL,

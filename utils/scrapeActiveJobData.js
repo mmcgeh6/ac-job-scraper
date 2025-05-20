@@ -25,6 +25,10 @@ export default async function scrapeActiveJobData(page, finalURL, fileName) {
       return detailMap
     }, jobDetailSelector)
 
+    if (jobDetails['Country'] !== 'United States') {
+      return
+    }
+
     const { latitude, longitude } =
       jobDetails['City'] === undefined
         ? { latitude: '', longitude: '' }

@@ -1,4 +1,5 @@
 import addToExcel from './addToExcel.js'
+import extractStateFromCity from './extractStateFromCity.js'
 import getCoordinates from './getCoordinates.js'
 import locationFromDesc from './locationFromDesc.js'
 
@@ -7,6 +8,8 @@ export default async function scrapeActiveJobData(page, finalURL, fileName) {
     '#container-d04abd4ec7 > div > div.job-detail.aem-GridColumn.aem-GridColumn--default--12 > div > table'
 
   const jobTable = await page.$(jobDetailSelector)
+  const jobTitle = await page.title()
+  console.log('Job Title:', jobTitle)
 
   if (jobTable) {
     const jobDetails = await page.evaluate((selector) => {
@@ -27,6 +30,15 @@ export default async function scrapeActiveJobData(page, finalURL, fileName) {
 
     if (jobDetails['Country'] !== 'United States') {
       return
+    }
+
+    // Set state from city if not already defined
+    if (jobDetails['City'] !== undefined && !jobDetails['State']) {
+      const inferredState = extractStateFromCity(jobDetails['City'], jobTitle)
+      console.log('Inferred state:', inferredState)
+      if (inferredState) {
+        jobDetails['State'] = inferredState
+      }
     }
 
     const { latitude, longitude } =

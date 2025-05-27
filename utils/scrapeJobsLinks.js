@@ -31,7 +31,7 @@ export default async function scrapeJobsLinks(startingLink, browser) {
       )
 
       addJobLinksToExcel(filename, jobLinks)
-      console.log(`📄 Added ${jobLinks.length} job links to Excel.`)
+      // console.log(`📄 Added ${jobLinks.length} job links to Excel.`)
 
       const nextBtn = await page.$(nextBtnSelector)
       const isDisabled = await page.$(nextDisabledSelector)

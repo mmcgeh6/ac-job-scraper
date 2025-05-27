@@ -3,14 +3,16 @@ import fs from 'fs'
 import fetchLinkFromSheet from './utils/fetchLinkFromSheet.js'
 import visitJobLinks from './utils/visitJobLinks.js'
 import scrapeJobsLinks from './utils/scrapeJobsLinks.js'
+import dotenv from 'dotenv'
+
+dotenv.config({
+  path: './.env',
+})
 
 const browser = await puppeteer.launch({ headless: false })
 
-// const startingLink =
-//   'https://www.atlascopcogroup.com/en/careers/jobs/job-overview?GROUP_EN_dateDesc%5BrefinementList%5D%5Bdata.country%5D%5B0%5D=United%20States'
-
 const startingLink =
-  'https://www.atlascopcogroup.com/en/careers/jobs/job-overview?GROUP_EN_dateDesc%5BrefinementList%5D%5Bdata.jobFunction%5D%5B0%5D=Engineering&GROUP_EN_dateDesc%5BrefinementList%5D%5Bdata.country%5D%5B0%5D=United%20States'
+  'https://www.atlascopcogroup.com/en/careers/jobs/job-overview?GROUP_EN_dateDesc%5BrefinementList%5D%5Bdata.country%5D%5B0%5D=United%20States'
 
 const filename = await scrapeJobsLinks(startingLink, browser)
 
@@ -19,12 +21,12 @@ const jobData = await fetchLinkFromSheet(filename)
 
 await visitJobLinks(jobData, browser)
 
-// fs.unlink(filename, (err) => {
-//   if (err) {
-//     console.error(`Error deleting file: ${err.message}`)
-//   } else {
-//     console.log('File deleted successfully!')
-//   }
-// })
+fs.unlink(filename, (err) => {
+  if (err) {
+    console.error(`Error deleting file: ${err.message}`)
+  } else {
+    // console.log('File deleted successfully!')
+  }
+})
 
 await browser.close()

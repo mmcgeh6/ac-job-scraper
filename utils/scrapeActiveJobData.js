@@ -1,7 +1,9 @@
 import addToExcel from './addToExcel.js'
+import deleteJobsFromWebhook from './deleteJobsFromWebhook.js'
 import extractStateFromCity from './extractStateFromCity.js'
 import getCoordinates from './getCoordinates.js'
 import locationFromDesc from './locationFromDesc.js'
+import upadteJobsOnWebhook from './upadteJobsOnWebhook.js'
 
 export default async function scrapeActiveJobData(page, finalURL, fileName) {
   const jobDetailSelector =
@@ -9,7 +11,7 @@ export default async function scrapeActiveJobData(page, finalURL, fileName) {
 
   const jobTable = await page.$(jobDetailSelector)
   const jobTitle = await page.title()
-  console.log('Job Title:', jobTitle)
+  // console.log('Job Title:', jobTitle)
 
   if (jobTable) {
     const jobDetails = await page.evaluate((selector) => {
@@ -54,8 +56,75 @@ export default async function scrapeActiveJobData(page, finalURL, fileName) {
     if (jobDetails['City'] === undefined) {
       jobLocation = await locationFromDesc(page)
     }
-    addToExcel(
+
+    await addToExcel(
       fileName,
+      [
+        'URL',
+        'Functional area',
+        'Country',
+        'State',
+        'City',
+        'On-site/remote',
+        'Brand',
+        'Company Name',
+        'Date of Posting',
+        'Last day to apply',
+        'Latitude',
+        'Longitude',
+        'Misc',
+      ],
+      [
+        finalURL,
+        jobDetails['Functional area'] || '',
+        jobDetails['Country'] || '',
+        jobDetails['State'] || '',
+        jobDetails['City'] || '',
+        jobDetails['On-site/remote'] || '',
+        jobDetails['Brand'] || '',
+        jobDetails['Company Name'] || '',
+        jobDetails['Date of Posting'] || '',
+        jobDetails['Last day to apply'] || '',
+        latitude,
+        longitude,
+        jobLocation || '',
+      ],
+    )
+
+    await deleteJobsFromWebhook(
+      [
+        'URL',
+        'Functional area',
+        'Country',
+        'State',
+        'City',
+        'On-site/remote',
+        'Brand',
+        'Company Name',
+        'Date of Posting',
+        'Last day to apply',
+        'Latitude',
+        'Longitude',
+        'Misc',
+      ],
+      [
+        finalURL,
+        jobDetails['Functional area'] || '',
+        jobDetails['Country'] || '',
+        jobDetails['State'] || '',
+        jobDetails['City'] || '',
+        jobDetails['On-site/remote'] || '',
+        jobDetails['Brand'] || '',
+        jobDetails['Company Name'] || '',
+        jobDetails['Date of Posting'] || '',
+        jobDetails['Last day to apply'] || '',
+        latitude,
+        longitude,
+        jobLocation || '',
+      ],
+    )
+
+    await upadteJobsOnWebhook(
       [
         'URL',
         'Functional area',

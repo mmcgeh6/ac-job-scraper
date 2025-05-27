@@ -1,3 +1,4 @@
+import { log } from 'console'
 import fs from 'fs'
 import * as XLSX from 'xlsx'
 
@@ -20,4 +21,5 @@ export default async function addToExcel(filePath, headers, rowData) {
   const newSheet = XLSX.utils.aoa_to_sheet(existingData)
   workbook.Sheets[workbook.SheetNames[0]] = newSheet
   XLSX.writeFile(workbook, filePath)
+  console.log('Job added to', filePath)
 }

@@ -8,7 +8,7 @@ export default function extractStateFromCity(city, title) {
         state.name.toLowerCase() === word.toLowerCase() ||
         state.abbreviation.toLowerCase() === word.toLowerCase(),
     )
-    console.log('matchThroughCity:', matchThroughCity)
+    // console.log('matchThroughCity:', matchThroughCity)
     if (matchThroughCity) {
       return matchThroughCity.name
     }
@@ -23,7 +23,7 @@ export default function extractStateFromCity(city, title) {
         state.name.toLowerCase() === word.toLowerCase() ||
         state.abbreviation.toLowerCase() === word.toLowerCase(),
     )
-    console.log('matchThroughTitle:', matchThroughTitle)
+    // console.log('matchThroughTitle:', matchThroughTitle)
     if (matchThroughTitle) {
       return matchThroughTitle.name
     }

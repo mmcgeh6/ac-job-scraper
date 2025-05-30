@@ -34,7 +34,7 @@ async function scrapeJobs() {
   await browser.close()
 }
 
-cron.schedule('*/5 * * * *', () => {
+cron.schedule('59 23 * * *', () => {
   ;(async () => {
     try {
       await scrapeJobs()

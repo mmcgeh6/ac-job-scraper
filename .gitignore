@@ -2,3 +2,4 @@
 utils/getCoordinates*
 /utils/getCoordinates.js
 
+.env

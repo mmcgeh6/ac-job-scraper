@@ -20,4 +20,5 @@ export default async function addToExcel(filePath, headers, rowData) {
   const newSheet = XLSX.utils.aoa_to_sheet(existingData)
   workbook.Sheets[workbook.SheetNames[0]] = newSheet
   XLSX.writeFile(workbook, filePath)
+  // console.log('Job added to', filePath)
 }

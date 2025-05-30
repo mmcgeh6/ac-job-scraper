@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const GOOGLE_API_KEY = '' // TODO: Replace with your Google Maps API key
+const GOOGLE_API_KEY = process.env.GOOGLE_GEOCODING_API_KEYs
 
 export default async function getCoordinates(city, state, country) {
   const address = `${city}, ${state}, ${country}`
